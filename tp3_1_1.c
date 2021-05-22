@@ -19,42 +19,86 @@ struct cliente_t{
     product *producto;//tamaño de este arreglo depende de la variable cantProducApedir
 };
 typedef struct cliente_t client;
+
 /*Declaracion de Funciones*/
-client *asigMD(client *datos, int *n);
-void CargarCliente(client *datos, int *n);
+void CargarCliente(client *datos, int n);
 
 int main(){
     srand(time(NULL));
     int cantClient;
         printf("Ingrese la cantidad de clientes: ");
         scanf("%d", &cantClient);
-    client *p_client=asigMD(p_client,&cantClient);
-    CargarCliente(p_client,&cantClient);
-    puts(p_client->producto->tipoProducto[0]);
+    
+    client *p_client=(client*)malloc(cantClient*sizeof(client));
+    CargarCliente(p_client,cantClient);
+
+	int i;
+	
+    for ( i = 0; i < cantClient; i++)
+    {
+        /* code */
+        printf("CLIENTE ID: %d \n Nombre: ",p_client->cliendteID);
+        puts(p_client->nombreCliente);
+        printf(" Cantidad de productos a pedir: %d", p_client->cantProducApedir);
+        printf("\n");
+        int j;
+        for ( j = 0; j < p_client->cantProducApedir; j++)
+        {
+            printf("\n  PRODUCTO ID: %d \n  Nombre de Producto: ",p_client->producto->productoID);
+            puts(p_client->producto->tipoProducto);
+            printf("  CANTIDAD: %d",p_client->producto->cantidad);
+        }
+        
+        
+        printf("\n\n");
+		p_client++;
+    }
     free(p_client);
+    
     return 0;
 }
 
 //Funciones
-client *asigMD(client *memoria, int *n){
-    client *clienteN=(client*)malloc(*n*sizeof(client));
-    return memoria;
-}
 
-void CargarCliente(client *datos, int *n){
-    for(int i=0; i < *n; i++){
-        datos->cliendteID= i+1;
-        datos->nombreCliente=malloc(20*sizeof(char));
-        printf("Ingrese el nombre del cliente: ");
+void CargarCliente(client *datos, int n){
+	int i;
+    for( i=0; i < n; i++){
+        //cliente id
+        datos->cliendteID= i + 1;
+
+        //Nombre cliente
+        printf("\n=========================================\n");
+        printf("ingrese el nombre del cliente %d: ", i+1);
+        datos->nombreCliente=(char *)malloc(sizeof(char)*20);
+        fflush(stdin);
         gets(datos->nombreCliente);
-        datos->cantProducApedir=rand()%(5-1+1)+1;
-        for (int i = 0; i < datos->cantProducApedir; i++)
+        printf("=========================================\n");
+        printf("\n");
+
+        //cantidad de productos a pedir
+        datos->cantProducApedir=rand()%(5 - 1 + 1) + 1;
+
+        //tipo de productos
+        int j;
+        for ( j = 0; j < datos->cantProducApedir; j++)
         {
-            datos->producto=(product*)malloc(i*sizeof(product));
-            datos->producto->productoID=i+1;
-            datos->producto->cantidad=rand()%(10-1+1)+1;
-            strcpy(datos->producto->tipoProducto[i],*t_productos[i]);
+            datos->producto=(product*)malloc(sizeof(product)*datos->cantProducApedir);
+            fflush(stdin);
+            //ID producto
+            datos->producto->productoID=j+1;
+
+            //cantidad
+            datos->producto->cantidad=rand()%(10 - 1 + 1) + 1;
+
+            //tipo producto
+            datos->producto->tipoProducto=(char*)malloc(sizeof(char)*20);
+            fflush(stdin);
+            int temp=rand()%(5-1+1)+1;
+            strcpy(datos->producto->tipoProducto,t_productos[temp]);
+            fflush(stdin);
+            datos->producto++;
         }
+        
         datos++;
     }
 }
